@@ -1,0 +1,28 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: on-failure
+    image: dockerimage
+    links:
+        - mysqlnew
+    depends_on: 
+        - redis
+        - mysqlnew
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  mysqlnew:
+    image: mysql/mysql-server:latest
+    container_name: mysqlnew1
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=example_schema
+    volumes:
+      - /data/mysql
+  
